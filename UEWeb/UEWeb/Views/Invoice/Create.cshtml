@@ -1,0 +1,270 @@
+﻿@model UEWeb.Models.Customer
+
+@{
+	ViewBag.Title = "Create";
+}
+<style>
+
+	.numeric{
+		max-width:120px;
+		min-width:120px;
+	}
+
+	.delete > span{
+		color:red;
+		font-size:20px;
+	}
+	.number {
+		font-family: Arial, Helvetica, sans-serif;
+		font-size:large;
+	}
+
+	.tt-input{
+		min-width:300px;
+		max-width:500px;
+		
+	}
+
+</style>
+<br />
+<div class="content">
+	<div class="row" data-bind="visible:viewModel.Visible">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<h2>New Invoice</h2>
+					<input type="hidden" value="@Model.Id" id="CustomerId"/>
+					<h6 class="text-primary">@Model.Name</h6>
+					<h6 class="text-muted">@Model.Address</h6>
+					<h6 class="text-muted">@Model.Contact</h6>
+
+				</div>
+				<div class="card-body">
+					<div class="form-group"> 
+						
+						<div class="table-responsive">
+							<table class="table" data-bind='visible: viewModel.Produts().length > 0'>
+								<thead class="text-primary">
+									<tr>
+										<th>
+											Product Name
+										</th>
+
+										<th class="text-center">
+											Price
+										</th>
+										<th>
+											Quantity
+										</th>
+										<th>
+											Bonus
+										</th>
+										<th class="text-center">
+											Amount
+										</th>
+										<th>
+											Discount %
+										</th>
+										<th class="text-center">
+											Net Amount
+										</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody data-bind='foreach: Produts'>
+									<tr>
+										<td data-bind="text:FullName" class="number"></td>
+										<td data-bind="numericText: Price" class="text-center number"></td>
+										<td><input type="number" min="0" class="form-control numeric number" data-bind="value: Quantity, valueUpdate: 'afterkeydown'" /></td>
+										<td><input type="number" min="0" class="form-control numeric number" data-bind="value: Bonus, valueUpdate: 'afterkeydown'" /></td>
+										<td data-bind="numericText: Amount" class="text-center number"></td>
+										<td><input type="number" min="0" class="form-control numeric number" data-bind="value: DiscountPerCent ,valueUpdate: 'afterkeydown'" /></td>
+										<td data-bind="numericText: NetAmount" class="text-center number"> </td>
+										<td data-bind="click: $root.RemoveProduct">
+											<h6 class="delete"><span class="now-ui-icons ui-1_simple-remove"></span></h6>
+										</td>
+									</tr>
+
+								</tbody>
+							</table>
+
+							<table class="table" >
+								 <thead class="text-success">
+									 <tr>
+									 	<th></th>
+									 	<th data-bind="visible:viewModel.Produts().length>0" class="text-center">Total</th>
+									 	<th></th> 
+									 	<th></th>
+									 	<th></th> 
+									 	<th data-bind="visible:viewModel.Produts().length>0" class="text-center">Grand Total</th>
+									 </tr>
+								 </thead>
+								 <tbody>
+								 	<tr>
+
+
+								 		<td>
+								 			<input id="product" type="text" class="form-control" placeholder="Enter product name or code" />
+								 		</td>
+								 		<td data-bind="text: viewModel.Produts().length,visible:viewModel.Produts().length>0" class="number text-center"></td>
+								 		<td></td>
+								 		<td></td>
+								 		<td></td>
+								 		<td data-bind="numericText: viewModel.GrandTotal(), visible:viewModel.Produts().length>0" class="number text-center"></td>
+								 		<td></td>
+								 	</tr>
+								 	<tr data-bind="visible: viewModel.Produts().length>0">
+
+
+								 		<td></td>
+								 		<td ></td>
+								 		<td></td>
+								 		<td></td>
+								 		<td></td> 
+								 		<td colspan="2"> <button data-bind="click: viewModel.CreateInvoice" class="btn btn-success">Create Invoice</button> </td>
+								 		 
+								 	</tr>
+								 </tbody>
+							</table> 
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div class="row" data-bind="visible:viewModel.Waiting">
+		<div class="col-md-4"></div>
+		<div class="col-md-4">
+			<img src="~/Content/Images/WaitingBalls.gif" />
+		</div>
+		<div class="col-md-4"></div>
+	</div>
+</div>
+
+@section Scripts {
+	@Scripts.Render("~/bundles/jqueryval")
+	<script src="~/Scripts/knockout-3.4.2.js"></script>
+	 
+	<script>
+		ko.bindingHandlers.numericText = {
+			update: function (element, valueAccessor, allBindingsAccessor) {
+				var value = ko.utils.unwrapObservable(valueAccessor()),
+					precision = ko.utils.unwrapObservable(allBindingsAccessor().precision) || ko.bindingHandlers.numericText.defaultPrecision,
+					formattedValue = value.toFixed(precision);
+
+				ko.bindingHandlers.text.update(element, function () { return formattedValue; });
+			},
+			defaultPrecision: 2
+		};
+
+		
+		function ProductModel(product) { 
+
+			this.Id = ko.observable(product.Id);
+			this.FullName = ko.observable(product.FullName);
+			this.Price = ko.observable(product.Price);
+			this.Quantity = ko.observable(1);
+			this.Bonus = ko.observable(0);
+			this.Amount = ko.computed(function () { return this.Quantity() * this.Price(); }, this);
+			this.DiscountPerCent = ko.observable(0);
+			this.NetAmount = ko.computed(function () { return this.Amount() - (this.Amount() * (this.DiscountPerCent() / 100)) }, this);
+
+			
+			 
+		};
+
+		var PrductViewModel = function () {
+			var self = this;
+			self.Produts = ko.observableArray();
+
+			self.Visible = ko.observable(true);
+			self.Waiting = ko.observable(false);
+
+			self.GrandTotal = ko.pureComputed(function () {
+
+				var total = 0;
+				$.each(self.Produts(), function () { total += this.NetAmount() })
+				return total;
+			},);
+
+			self.AddProduct = function (productvm) {
+				self.Produts.push(productvm);
+
+			};
+
+			self.RemoveProduct = function (productvm) {
+				self.Produts.remove(productvm);
+			};
+
+			self.CreateInvoice = function () {
+
+
+			//	console.log(ko.toJSON(viewModel.Produts));
+				 
+				var customerId = $("#CustomerId").val();
+				self.Visible(false);
+				self.Waiting(true);
+				$.ajax({
+					type: 'POST',
+					url: '/Sale/Create/',
+					data: ko.toJSON( { "customerId": customerId, "sales": viewModel.Produts }), 
+					contentType: "application/json; charset=utf-8",
+					dataType: "json",
+					success: function (response) {
+						//console.log(response);
+						//console.log(this.data);
+						window.location.href = response.redirect;
+					},
+					error: function (error) {
+						//console.log(this.data);
+						//$(".content").html(JSON.stringify(error));
+						console.log(JSON.stringify(error));
+						 alert("Error while creating invoice")
+					}
+				});
+
+			 
+
+			};
+			 
+		};
+
+		var viewModel = new PrductViewModel();
+		 
+		ko.applyBindings(viewModel);
+ 
+	</script>
+
+	 
+	<script>
+		var products = new Bloodhound({
+			datumTokenizer: Bloodhound.tokenizers.obj.whitespace('FullName'),
+			queryTokenizer: Bloodhound.tokenizers.whitespace,
+			remote: {
+				url: '/api/products?query=%QUERY',
+				wildcard: '%QUERY'
+			}
+		});
+
+		$('#product').typeahead({
+
+			minLength: 3,
+			highlight: true
+
+		}, {
+				name: 'products',
+				display: 'FullName',
+				source: products
+			}).on("typeahead:select", function (e, product) {
+
+
+				var vm = new ProductModel(product);
+				viewModel.AddProduct(vm);
+
+
+			});
+	</script>
+
+}

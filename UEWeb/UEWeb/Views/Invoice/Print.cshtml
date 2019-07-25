@@ -1,0 +1,133 @@
+﻿@model UEWeb.Models.Invoice
+@{
+
+	Layout = "~/Views/Shared/_PrintLayout.cshtml";
+}
+<br />
+
+
+<div class="content ">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<div class="row" id="printheader">
+						<div class="col-md-12">
+							<div class="text-center">
+								<h3>INVOICE</h3>
+								<p><b>Umair Enterprise Nawakaly Mingora Swat, 0347-9416668</b></p>
+							</div>
+						</div>
+						<!---->
+						<div class="table-responsive">
+							<table class="table">
+
+								<thead class="text-primary">
+									<tr>
+										<td>&nbsp;</td>
+										<td><b>Order</b></td>
+
+										<td><b>Bill To</b></td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>&nbsp;</td>
+										<td>
+											<p><b><i class="now-ui-icons shopping_box"></i></b>  @Model.Id@Model.Date.Year@Model.InvoiceDetails.Count</p>
+											<p><b> <i class="now-ui-icons ui-1_calendar-60"></i></b> @Model.Date.ToLongDateString()</p>
+
+										</td>
+
+										<td>
+											<p class="text-primary"><i class="now-ui-icons users_single-02"></i> @Model.Customer.Name</p>
+											<p ><i class="now-ui-icons location_pin"></i>  @Model.Customer.Address</p>
+											<p > <i class="now-ui-icons tech_mobile"></i> @Model.Customer.Contact</p>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<!---->
+					</div>
+
+				</div>
+				<div class="card-body">
+					<div class="form-group">
+
+						<div class="table-responsive">
+							<table class="table">
+
+								<thead class="text-primary">
+									<tr>
+										<th>
+											<small>Product </small>
+										</th>
+
+										<th class="text-center">
+											<small>Price</small>
+										</th>
+										<th class="text-center">
+											<small>Quantity</small>
+										</th>
+										<th class="text-center">
+											<small>Bonus</small>
+										</th>
+										<th class="text-center">
+											<small>Amount</small>
+										</th>
+										<th class="text-center">
+											<small>Discount</small>
+										</th>
+										<th class="text-center">
+											<small>Net Amount</small>
+										</th>
+
+									</tr>
+								</thead>
+								@{
+									var grandTotal = 0;
+
+								}
+								<tbody>
+									@foreach (var sale in Model.InvoiceDetails)
+									{
+										var total = sale.Quantity * sale.TradPrice;
+										var netTotal = total - (total * sale.Dicount / 100);
+										<tr>
+											<td>@sale.Product.Name @sale.Product.Code</td>
+											<td class="text-center">@sale.TradPrice</td>
+											<td class="text-center">@sale.Quantity</td>
+											<td class="text-center">@sale.Bonus</td>
+											<td class="text-center">@total</td>
+											<td class="text-center">@sale.Dicount%</td>
+											<td class="text-center">@netTotal</td>
+										</tr>
+
+										grandTotal += (int)netTotal;
+									}
+									<tr>
+										<td>
+											&nbsp;
+										</td>
+										<td>
+											&nbsp;
+										</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td><b>Total</b></td>
+										<td class="text-center"><b> @Model.InvoiceDetails.Count</b> </td>
+										<td class="text-center"><b>@grandTotal</b></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+

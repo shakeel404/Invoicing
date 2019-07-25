@@ -1,0 +1,12 @@
+﻿ 
+@media print {
+	thead {
+		 
+		display:table-row-group; 
+		page-break-before: always !important;
+	} 
+
+	
+}
+
+ 

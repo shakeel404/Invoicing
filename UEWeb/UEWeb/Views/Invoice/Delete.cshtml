@@ -1,0 +1,89 @@
+﻿@model UEWeb.Models.Invoice
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+
+<br />
+<div class="content">
+
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+				
+					<h3 class="text-primary">Are you sure you want to delete this invoice?</h3>
+
+				</div>
+				<div class="card-body">
+					 <div class="row"> 
+						 <div class="col-md-1"></div>
+						 <div class="col-md-8">
+						 <h4 class="text-info" ><i class="now-ui-icons users_single-02"></i> @Model.Customer.Name </h4>
+						 <h5 class="text-primary"><i class="now-ui-icons location_pin"></i> @Model.Customer.Address </h5>
+						 <h5 class="text-primary"><i class="now-ui-icons tech_mobile"></i> @Model.Customer.Contact </h5>
+						 </div>
+						 <div class="col-md-3"></div>
+					 </div> 
+					 <div class="row">
+						 <div class="col-md-1">
+							
+						 </div>
+						 <div class="col-md-3">
+						 	<h5 class="text-info">
+						 		Order
+						 	</h5>
+						 </div>
+						 <div class="col-md-6"></div> 
+					 </div>
+					<div class="row">
+						<div class="col-md-1"></div>
+						<div class="col-md-6">
+							<table class="table">
+								<thead class="text-primary">
+									<tr>
+										<th class="text-center">
+											<i class="now-ui-icons shopping_box"></i><br />
+											<small>Order No</small>
+										</th>
+
+										<th class="text-center">
+											<i class="now-ui-icons ui-1_calendar-60"></i><br />
+											<small>Date</small>
+										</th>
+										<th class="text-center">
+											<i class="now-ui-icons shopping_delivery-fast"></i><br />
+											<small>Items</small>
+										</th>
+
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td  class="text-center"><h6> @Model.Id@Model.Date.Year@Model.InvoiceDetails.Count</h6></td>
+										<td  class="text-center"><h6> @Model.Date.ToLongDateString()</h6></td>
+										<td  class="text-center"><h6> @Model.InvoiceDetails.Count</h6></td>
+
+									</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="col-md-5">
+							@using (Html.BeginForm())
+							{
+								@Html.AntiForgeryToken()
+
+								<div class="form-actions no-color">
+									<input type="submit" value="Delete" class="btn btn-default" />
+
+								</div>
+							}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

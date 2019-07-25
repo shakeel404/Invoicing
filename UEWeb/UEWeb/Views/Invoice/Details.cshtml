@@ -1,0 +1,158 @@
+﻿@model UEWeb.Models.Invoice
+
+@{
+	ViewBag.Title = "Details";
+}
+
+<br />
+
+<div id="printarea" class="content ">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<div class="row" id="printheader">
+						<div class="col-md-4 col-sm-4" id="invoicedatearea">
+							<h2>&nbsp;</h2>
+							<p><b>Order</b></p>
+							<p><b><i class="now-ui-icons shopping_box"></i></b>  @Model.Id@Model.Date.Year@Model.InvoiceDetails.Count</p>
+							<p><b> <i class="now-ui-icons ui-1_calendar-60"></i></b> @Model.Date.ToLongDateString()</p>
+						</div>
+						<div class="col-md-4 col-sm-4" id="invoicetitlearea">
+							<div class="text-center">
+								<h3>INVOICE</h3>
+								<p><b>Umair Enterprise Nawakaly Mingora Swat, 0347-9416668</b></p>
+							</div>
+						</div>
+						<div class="col-md-4 col-sm-4" id="billtoarea">
+							<h2>&nbsp;</h2>
+							<p><b>Bill To</b></p>
+							<p class="text-primary"><i class="now-ui-icons users_single-02"></i> @Model.Customer.Name</p>
+							<p class="text-muted"><i class="now-ui-icons location_pin"></i>  @Model.Customer.Address</p>
+							<p class="text-muted"> <i class="now-ui-icons tech_mobile"></i> @Model.Customer.Contact</p>
+
+						</div>
+					</div>
+
+				</div>
+				<div class="card-body">
+					<div class="form-group">
+
+						<div class="table-responsive">
+							<table class="table">
+
+								<thead class="text-primary">
+									<tr>
+										<th>
+											<small>Product </small>
+										</th>
+
+										<th class="text-center">
+											<small>Price</small>
+										</th>
+										<th class="text-center">
+											<small>Quantity</small>
+										</th>
+										<th class="text-center">
+											<small>Bonus</small>
+										</th>
+										<th class="text-center">
+											<small>Amount</small>
+										</th>
+										<th class="text-center">
+											<small>Discount</small>
+										</th>
+										<th class="text-center">
+											<small>Net Amount</small>
+										</th>
+
+									</tr>
+								</thead>
+								@{
+									var grandTotal = 0;
+
+								}
+								<tbody>
+									@foreach (var sale in Model.InvoiceDetails)
+									{
+										var total = sale.Quantity * sale.TradPrice;
+										var netTotal = total - (total * sale.Dicount / 100);
+										<tr>
+											<td>@sale.Product.Name @sale.Product.Code</td>
+											<td class="text-center">@sale.TradPrice</td>
+											<td class="text-center">@sale.Quantity</td>
+											<td class="text-center">@sale.Bonus</td>
+											<td class="text-center">@total</td>
+											<td class="text-center">@sale.Dicount%</td>
+											<td class="text-center">@netTotal</td>
+										</tr>
+
+										grandTotal += (int)netTotal;
+									}
+									<tr>
+										<td>
+											<div id="printbtn" >
+												<button class="btn btn-primary" onclick="Print()">
+													<i class="now-ui-icons files_paper"></i> Print
+												</button>
+												<a href="@Url.Action("Print","Invoice",new { id= Model.Id})" class="btn btn-success" target="_blank">
+													<i class="now-ui-icons education_agenda-bookmark"></i> PDF
+												</a>
+											</div>
+										</td>
+										<td>
+											&nbsp;
+										</td>
+										<td>&nbsp;</td>
+										<td>&nbsp;</td>
+										<td><b>Total</b></td>
+										<td class="text-center"><b> @Model.InvoiceDetails.Count</b> </td>
+										<td class="text-center"><b>@grandTotal</b></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<script>
+
+	function Print() {
+
+
+		var printarea = this.document.getElementById("printarea").innerHTML;
+
+		var printwindow = window.open('', 'Print-Window');
+
+		printwindow.document.open();
+
+		var title = '<title>Print</title>';
+		var head = title + '<head>' + '<link href="/Content/demo.css" rel="stylesheet" />' + '<link href="/Content/bootstrap.min.css" rel="stylesheet"/>' + '<link href="/Content/now-ui-dashboard.min.css" rel="stylesheet"/>' + '<link href="/Content/Site.css" rel="stylesheet" />' + '</head>';
+
+		var invoiceContent = '<html> ' + head + ' <body onload="window.print()">' + printarea + '</body></html>'
+
+		printwindow.document.write(invoiceContent)
+		printwindow.document.getElementById("printbtn").outerHTML = '';
+
+		//printheader
+		var invoiceDate = printwindow.document.getElementById("invoicedatearea").outerHTML;
+		var invoiceTitle = printwindow.document.getElementById("invoicetitlearea").outerHTML;
+		var billTo = printwindow.document.getElementById("billtoarea").outerHTML;
+
+		invoiceTitle = invoiceTitle.replace("col-md-4", "col-sm-12 coll-md-12");
+		invoiceDate = invoiceDate.replace("col-md-4", "col-sm-6 col-md-6");
+		billTo = billTo.replace("col-md-4", "col-sm-6 col-md-6");
+
+		printwindow.document.getElementById("printheader").innerHTML = invoiceTitle + invoiceDate + billTo;
+		printwindow.document.close();
+
+
+	};
+
+</script>

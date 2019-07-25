@@ -1,0 +1,71 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Invoice</title>
+
+	@Styles.Render("~/Content/css")
+
+	<style>
+		html div table table > tr > td  .card .main-panel .card-body .ps-container .ps-theme-default {
+			background-color: #ffffff !important;
+
+		}
+
+		.card {
+			box-shadow: none !important;
+		}
+
+		thead {
+			display: table-row-group
+		} 
+
+		tr {
+			page-break-before: always !important;
+			page-break-inside: avoid !important;
+		}
+
+		.content {
+			overflow: visible !important;
+		}
+
+		td {
+			page-break-inside: avoid !important;
+		}
+		 
+
+@@media print {
+
+		thead {
+			display: table-row-group
+		}
+
+		 
+
+
+		tr {
+			 
+			page-break-before: always !important;
+			page-break-inside: avoid !important;
+		}
+
+		td {
+			page-break-inside: avoid !important;
+		}
+		.content {
+			overflow: visible !important;
+		}
+		 
+}
+
+
+
+	</style>
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>

@@ -1,0 +1,196 @@
+﻿@model UEWeb.Models.Statistics 
+<br />
+<div class="content">
+	<div class="row">
+		<div class="col-lg-4">
+			<div class="card card-chart">
+				<div class="card-header">
+					<h5 class="card-category">Top 5</h5>
+					<h4 class="card-title text-primary">Customers</h4>
+				</div>
+				<div class="card-body">
+					<div class="table-full-width table-responsive">
+						<table class="table">
+							<tbody>
+								@foreach (var item in Model.Customers)
+								{
+									<tr>
+										<td>
+											<a class="text-info" href="@Url.Action("Details", "Customer", new { id = item.Id })">
+											@item.Name <br />
+												<small class="text-primary"><b>@item.Address</b> </small>
+											</a>
+										</td>
+
+									</tr>
+								}
+								 
+							</tbody>
+						</table>
+					</div> 
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						<i class="now-ui-icons arrows-1_refresh-69"></i> Just Updated
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="card card-chart">
+				<div class="card-header">
+					<h5 class="card-category">Top 5</h5>
+					<h4 class="card-title text-primary">Invoices</h4>
+				</div>
+				<div class="card-body">
+					<div class="table-full-width table-responsive">
+						<table class="table">
+							<tbody>
+								@foreach (var item in Model.Invoices)
+								{
+									<tr>
+										<td>
+											<a class="text-info" href="@Url.Action("Details", "Invoice", new { id = item.Id })">
+												@item.Customer.Name <br />
+												<small class="text-primary">
+													<b>@item.Id@item.Date.Year@item.InvoiceDetails.Count @@ @item.Date.ToLongDateString()</b>
+												</small> 
+											</a>
+										</td>
+
+									</tr>
+								}
+								 
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						<i class="now-ui-icons arrows-1_refresh-69"></i> Just Updated
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-lg-4">
+			<div class="card card-chart">
+				<div class="card-header">
+					<h5 class="card-category">Top 5</h5>
+					<h4 class="card-title text-primary">Products</h4>
+				</div>
+				<div class="card-body">
+					<div class="table-full-width table-responsive">
+						<table class="table">
+							<tbody>
+								@foreach (var item in Model.Products)
+								{
+								<tr>
+									<td>
+										<a class="text-info" href="@Url.Action("Details","Product",new {id=item.Id })">@item.Name <br />
+										<small class="text-primary"><b> @item.Code</b></small>
+										</a>
+									</td>
+
+								</tr>
+								}
+								 
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card-footer">
+					<div class="stats">
+						<i class="now-ui-icons arrows-1_refresh-69"></i> Just Updated
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+					 
+					<h4 class="card-title">Recent Customer</h4>
+				</div>
+				<div class="card-body">
+					<div class="table-full-width table-responsive">
+						<table class="table">
+							<tbody>
+								@foreach (var item in Model.RecentCustomers)
+								{
+									<tr>
+										<td>
+											<a class="text-info" href="@Url.Action("Details", "Customer", new { id = item.Id })">
+											@item.Name <br /> 
+											<small class="text-primary"><b>@item.Address</b></small></a>
+										</td>
+
+									</tr>
+								}
+								  
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="card-footer">
+					<hr>
+					<div class="stats">
+						<i class="now-ui-icons loader_refresh"></i> Updated Now
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="card">
+				<div class="card-header">
+					<h5 class="card-category">All Persons List</h5>
+					<h4 class="card-title"> Recent Invoices</h4>
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table">
+							<thead class=" text-primary">
+								<tr>
+									<th>
+										Customer Name
+									</th>
+									<th>
+										Invoice
+									</th>
+									<th>
+										 
+									</th>
+									 
+								</tr>
+							</thead>
+							<tbody>
+
+								@foreach (var item in Model.RecentInvoices)
+								{
+									<tr>
+										<td>
+											@item.Customer.Name
+										</td>
+										<td>
+											@item.Id@item.Date.Year@item.InvoiceDetails.Count
+										</td>
+										<td>
+											<a class="btn btn-success" href="@Url.Action("Details", "Invoice", new { id = item.Id })">
+											 Details</a>
+
+										</td>
+										 
+									</tr>
+								}
+
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

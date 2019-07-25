@@ -1,0 +1,98 @@
+﻿@model  PagedList.IPagedList<UEWeb.Models.Customer>
+@using PagedList.Mvc;
+@{
+	ViewBag.Title = "Index";
+}
+<style>
+	li{
+		margin-left:10px ;
+	}
+</style>
+<br />
+<div class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="card">
+				<div class="card-header">
+					<a href="@Url.Action("Create","Customer")" class="btn btn-success">Ceate New</a>
+					<form action="@Url.Action("Index","Customer")" id="searchform">
+						<div class="input-group no-border">
+							<input name="search" id="search" type="text" value="" class="form-control" placeholder="Search...">
+
+							<span class="input-group-addon searchbtn">
+								<i class="now-ui-icons ui-1_zoom-bold"></i>
+							</span>
+						</div>
+
+					</form>
+					<small>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</small>
+
+				</div>
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table">
+							<thead class=" text-primary">
+								<tr>
+									<th>
+										Name
+									</th>
+									<th>
+										Address
+									</th>
+									<th>
+										Contact
+									</th>
+									<th class="text-right">
+										Invoice
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								@{
+									 
+								}
+								@foreach (var item in Model)
+								{
+									<tr>
+										<td>
+											@Html.DisplayFor(modelItem => item.Name)
+										</td>
+										<td>
+											@Html.DisplayFor(modelItem => item.Address)
+										</td>
+										<td>
+											@Html.DisplayFor(modelItem => item.Contact)
+										</td>
+										<td class="text-right">
+											 <a href="@Url.Action("Create","Invoice",new {customerId= item.Id })" class="text-primary">New Invoice</a>
+
+										</td>
+										<td class="text-right">
+											@Html.ActionLink("Edit", "Edit", new { id = item.Id }, new { @class = "text-primary" }) |
+											@Html.ActionLink("Details", "Details", new { id = item.Id }, new { @class = "text-success" }) |
+											@Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { @class = "text-danger" })
+										</td>
+									</tr>
+								}
+							</tbody>
+						</table>
+					</div>
+
+					@Html.PagedListPager(Model, page => Url.Action("Index",
+					new { page,search = ViewBag.CurrentSearch })) 
+				</div>  
+				
+			</div>
+		</div>
+	</div>
+</div>
+
+
+@section scripts{
+
+	<script>
+		$(".searchbtn").click(function () { $("#searchform").submit(); });
+
+	</script>
+
+}

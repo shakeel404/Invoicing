@@ -1,0 +1,85 @@
+﻿@using UEWeb.Utilities
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>@ViewBag.Title UE</title>
+
+
+
+
+	@Styles.Render("~/Content/css")
+	@Scripts.Render("~/bundles/modernizr")
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
+	<link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+	<link href="~/Content/demo.css" rel="stylesheet" />
+</head>
+<body>
+	<div class="wrapper ">
+		<div class="sidebar" data-color="orange" >
+			<!--
+				Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+			-->
+			<div class="logo">
+				<a href="#" class="simple-text logo-mini">
+					UE
+				</a>
+				<a href="#" class="simple-text logo-normal">
+					Umair Enterprise
+				</a>
+			</div>
+			<div class="sidebar-wrapper ps-container ps-theme-default" data-ps-id="f29ae073-e424-4b79-0b80-c3358915947a">
+				<ul class="nav">
+					<li class="@Html.IsActive("Home","Index")">
+						<a href="@Url.Action("Index","Home")">
+							<i class="now-ui-icons design_app"></i>
+							<p>Dashboard</p>
+						</a>
+					</li>
+					<li class="@Html.IsActive("Customer")">
+						<a href="@Url.Action("Index","Customer")">
+							<i class="now-ui-icons users_single-02"></i>
+							<p>Customers</p>
+						</a>
+					</li>
+					<li class="@Html.IsActive("Product")">
+						<a href="@Url.Action("Index","Product")">
+							<i class="now-ui-icons health_ambulance"></i>
+							<p>Products</p>
+						</a>
+					</li>
+					<li class="@Html.IsActive("Invoice")" >
+						<a href="@Url.Action("Index","Invoice")">
+							<i class="now-ui-icons files_single-copy-04"></i>
+							<p>Invoices</p>
+						</a>
+					</li>
+					<li class="@Html.IsActive("Home","About")">
+						<a href="@Url.Action("About","Home")">
+							<i class="now-ui-icons users_circle-08"></i>
+							<p>About</p>
+						</a>
+					</li>
+					<li class="@Html.IsActive("Home","Contact")">
+						<a href="@Url.Action("Contact","Home")">
+							<i class="now-ui-icons location_pin"></i>
+							<p>Contact</p>
+						</a>
+					</li> 
+					
+				</ul>
+				<div class="ps-scrollbar-x-rail" style="left: 0px; bottom: 0px;"><div class="ps-scrollbar-x" tabindex="0" style="left: 0px; width: 0px;"></div></div><div class="ps-scrollbar-y-rail" style="top: 0px; right: 0px;"><div class="ps-scrollbar-y" tabindex="0" style="top: 0px; height: 0px;"></div></div>
+			</div>
+		</div>
+		<div class="main-panel ps-container ps-theme-default" data-ps-id="70c17864-300a-2358-b613-73d839c299ae"> 
+			@RenderBody()
+		</div>
+	</div>
+
+	@Scripts.Render("~/bundles/jquery")
+	@Scripts.Render("~/bundles/bootstrap")
+	@RenderSection("scripts", required: false)
+	 
+</body>
+</html>
